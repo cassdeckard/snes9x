@@ -40,6 +40,9 @@
     <Filter Include="Filter">
       <UniqueIdentifier>{1e3e39fd-b2d2-4c3f-83b2-b5731ab8deee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Wanderbar">
+      <UniqueIdentifier>{d72c3533-fbcd-4372-8491-7919b4ce6d41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -245,6 +248,21 @@
     </ClInclude>
     <ClInclude Include="..\msu1.h">
       <Filter>APU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\ScreenImage.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\Sidebar.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\js_delegate.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\method_dispatcher.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\sidebar-snes.h">
+      <Filter>Wanderbar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -544,6 +562,15 @@
     </ClCompile>
     <ClCompile Include="..\msu1.cpp">
       <Filter>APU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\ScreenImage.cpp">
+      <Filter>Wanderbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-main.cpp">
+      <Filter>Wanderbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-snes.cpp">
+      <Filter>Wanderbar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

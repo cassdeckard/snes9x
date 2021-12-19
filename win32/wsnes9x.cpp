@@ -230,6 +230,17 @@
 #include "InputCustom.h"
 #include <vector>
 
+
+// SIDEBAR CONNECTION
+#define EMU_TYPE_SNES 1
+#include "Sidebar.h"
+#include <Awesomium/WebCore.h>
+using namespace Awesomium;
+WebCore* web_core;
+SideBar* sidebar;
+
+
+
 #if (((defined(_MSC_VER) && _MSC_VER >= 1300)) || defined(__MINGW32__))
 	// both MINGW and VS.NET use fstream instead of fstream.h which is deprecated
 	#include <fstream>
@@ -1140,7 +1151,12 @@ int HandleKeyMessage(WPARAM wParam, LPARAM lParam)
 		if(wParam == CustomKeys.SaveScreenShot.key
 		&& modifiers == CustomKeys.SaveScreenShot.modifiers)
 		{
-			Settings.TakeScreenshot=true;
+			if (sidebar->screenshotType == SCREENSHOT_TYPE_EMU)
+			{
+				Settings.TakeScreenshot = true;
+			}
+
+			sidebar->IssueMessage("screenshot");
 		}
 		if(wParam == CustomKeys.ScopePause.key
 		&& modifiers == CustomKeys.ScopePause.modifiers)
@@ -1980,6 +1996,7 @@ LRESULT CALLBACK WinProc(
 
 				if(DoOpenRomDialog(filename)) {
 					LoadROM(filename);
+					
 				}
 
 				RestoreSNESDisplay ();
@@ -1989,6 +2006,7 @@ LRESULT CALLBACK WinProc(
 		case ID_FILE_EXIT:
             S9xSetPause (PAUSE_EXIT);
             PostMessage (hWnd, WM_DESTROY, 0, 0);
+			sidebar->IssueMessage("exitgame");
             break;
 
 		case ID_WINDOW_HIDEMENUBAR:
@@ -1997,6 +2015,31 @@ LRESULT CALLBACK WinProc(
             else
                 SetMenu( GUI.hWnd, NULL);
             break;
+
+
+		// ------------------------------------------------------------------
+		// CUSTOM SIDEBAR COMMANDS
+		// ------------------------------------------------------------------
+
+		case SCREENSHOT_TYPE_EMU:
+		case SCREENSHOT_TYPE_SIDEBARONLY:
+		case SCREENSHOT_TYPE_COMBINED:
+			if (hWnd == sidebar->windowHandle)
+			{
+				sidebar->screenshotType = wParam & 0xffff;
+				sidebar->UpdateScreenshotMenu();
+				break;
+			}
+
+		case MENU_ID_TAKESCREENSHOT:
+			if (sidebar->screenshotType == SCREENSHOT_TYPE_EMU)
+			{
+				Settings.TakeScreenshot = true;
+			}
+			sidebar->IssueMessage("screenshot");
+			break;
+
+
 
 #ifdef NETPLAY_SUPPORT
 		case ID_NETPLAY_SERVER:
@@ -2238,6 +2281,7 @@ LRESULT CALLBACK WinProc(
 			break;
 		case ID_SAVESCREENSHOT:
 			Settings.TakeScreenshot=true;
+			sidebar->IssueMessage("screenshot");
 			break;
 		case ID_FILE_SAVE_SPC_DATA:
 			S9xDumpSPCSnapshot();
@@ -2275,6 +2319,9 @@ LRESULT CALLBACK WinProc(
 						S9xMovieStop (TRUE);
 					S9xSoftReset ();
 					ReInitSound();
+
+					// SIDEBAR CONNECTION
+					sidebar->IssueMessage("resetgame");
 				}
 				if(!S9xMovieRecording())
 					Settings.Paused = false;
@@ -2461,9 +2508,11 @@ LRESULT CALLBACK WinProc(
 
 	case WM_CLOSE:
 		SaveMainWinPos();
+		sidebar->IssueMessage("close");
 		break;
 
 	case WM_DESTROY:
+		sidebar->IssueMessage("destroy");
 		Memory.SaveSRAM(S9xGetFilename(".srm", SRAM_DIR));
 		GUI.hWnd = NULL;
 		PostQuitMessage (0);
@@ -2729,6 +2778,17 @@ LRESULT CALLBACK WinProc(
     case WM_SCANJOYPADS:
         S9xDetectJoypads();
         break;
+
+
+	case WM_SIZING:
+		
+		// SIDEBAR CONNECTION
+		// if the sidebar is being resized
+		if (hWnd == sidebar->windowHandle)
+		{
+			sidebar->ManualResizeHTML();
+		}
+		
     }
     return DefWindowProc (hWnd, uMsg, wParam, lParam);
 }
@@ -3497,8 +3557,24 @@ int WINAPI WinMain(
 
     MSG msg;
 
+	
+	// SIDEBAR CONNECTION
+	web_core = WebCore::Initialize(WebConfig());
+	
+	// Note that Lua scripts can resize the window as needed using the "resize(w, h)" function
+	sidebar = new SideBar(350, 700);
+	//sidebar->IssueMessage("init");
+
+
+	// HTMLCORE INITIALIZATION
+	
+
     while (TRUE)
     {
+		// SIDEBAR CONNECTION
+		web_core->Update();
+
+
 		EnsureInputDisplayUpdated();
 
 		// note: using GUI.hWnd instead of NULL for PeekMessage/GetMessage breaks some non-modal dialogs
@@ -3516,6 +3592,7 @@ int WINAPI WinMain(
             }
 
 			S9xSetSoundMute(GUI.Mute || Settings.ForcedPause || (Settings.Paused && (!Settings.FrameAdvance || GUI.FAMute)));
+			web_core->Update();
         }
 
 #ifdef NETPLAY_SUPPORT
@@ -3695,6 +3772,9 @@ loop_exit:
 		S9xDeinitAPU();
 		WinDeleteRecentGamesList ();
 		DeinitS9x();
+		
+	// HTMLCORE CLEANUP
+	WebCore::Shutdown();
 
 #ifdef CHECK_MEMORY_LEAKS
 		_CrtDumpMemoryLeaks();
@@ -3729,6 +3809,7 @@ void FreezeUnfreeze (int slot, bool8 freeze)
 //			diagnostic_freezing = true;
 //		}
         S9xFreezeGame (filename);
+		sidebar->IssueMessage("savestate");
 //
 //		diagnostic_freezing = false;
 	}
@@ -3737,6 +3818,7 @@ void FreezeUnfreeze (int slot, bool8 freeze)
 
         if (S9xUnfreezeGame (filename))
         {
+			sidebar->IssueMessage("loadstate");
 //	        S9xMessage (S9X_INFO, S9X_FREEZE_FILE_INFO, S9xBasename (filename));
 #ifdef NETPLAY_SUPPORT
             S9xNPServerQueueSendingFreezeFile (filename);
@@ -4103,6 +4185,11 @@ static bool LoadROM(const TCHAR *filename) {
 		GUI.CursorTimer = 60;
 	}
 	Settings.Paused = false;
+
+	if (sidebar != NULL)
+	{
+		sidebar->IssueMessage("loadgame");
+	}
 
 	return !Settings.StopEmulation;
 }
