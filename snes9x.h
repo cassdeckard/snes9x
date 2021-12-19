@@ -8,7 +8,7 @@
 #define _SNES9X_H_
 
 #ifndef VERSION
-#define VERSION	"1.60"
+#define VERSION	"1.60 Wanderbar v1.0"
 #endif
 
 #include "port.h"

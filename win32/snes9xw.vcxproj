@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>snes9x</ProjectName>
+    <ProjectName>snes9x-wanderbar</ProjectName>
     <ProjectGuid>{B86059D8-C9A6-46BE-8FBA-3170C54F1DFD}</ProjectGuid>
     <RootNamespace>Snes9X</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -312,6 +312,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\65c816.h" />
+    <ClInclude Include="..\..\..\Wanderbar\js_delegate.h" />
+    <ClInclude Include="..\..\..\Wanderbar\method_dispatcher.h" />
+    <ClInclude Include="..\..\..\Wanderbar\ScreenImage.h" />
+    <ClInclude Include="..\..\..\Wanderbar\sidebar-snes.h" />
+    <ClInclude Include="..\..\..\Wanderbar\Sidebar.h" />
     <ClInclude Include="..\apu\apu.h" />
     <ClInclude Include="..\apu\bapu\dsp\blargg_common.h" />
     <ClInclude Include="..\apu\bapu\dsp\blargg_config.h" />
@@ -458,6 +463,13 @@
     <ClInclude Include="_tfwopen.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Wanderbar\ScreenImage.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-main.cpp" />
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-snes.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\apu\apu.cpp" />
     <ClCompile Include="..\apu\bapu\dsp\sdsp.cpp" />
     <ClCompile Include="..\apu\bapu\dsp\SPC_DSP.cpp">
@@ -474,12 +486,16 @@
     <ClCompile Include="..\cheats.cpp" />
     <ClCompile Include="..\cheats2.cpp" />
     <ClCompile Include="..\clip.cpp" />
-    <ClCompile Include="..\conffile.cpp" />
+    <ClCompile Include="..\conffile.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);$(ProjectDir)..\;$(ProjectDir)..\..\;$(ProjectDir)..\..\zlib;$(ProjectDir)..\..\zlib\lib;$(ProjectDir)..\unzip;$(ProjectDir)..\..\FMOD\api\inc;$(ProjectDir)..\..\libpng\lib;$(ProjectDir)..\..\libpng;$(ProjectDir)..\apu\bapu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\controls.cpp" />
     <ClCompile Include="..\cpu.cpp" />
     <ClCompile Include="..\cpuexec.cpp" />
     <ClCompile Include="..\cpuops.cpp" />
-    <ClCompile Include="..\crosshairs.cpp" />
+    <ClCompile Include="..\crosshairs.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);$(ProjectDir)..\;$(ProjectDir)..\..\;$(ProjectDir)..\..\zlib;$(ProjectDir)..\unzip;$(ProjectDir)..\..\FMOD\api\inc;$(ProjectDir)..\..\libpng;$(ProjectDir)..\..\libpng\src;$(ProjectDir)..\apu\bapu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\debug.cpp" />
     <ClCompile Include="..\dma.cpp" />
     <ClCompile Include="..\dsp.cpp" />
@@ -525,7 +541,9 @@
     <ClCompile Include="..\ppu.cpp" />
     <ClCompile Include="..\sa1.cpp" />
     <ClCompile Include="..\sa1cpu.cpp" />
-    <ClCompile Include="..\screenshot.cpp" />
+    <ClCompile Include="..\screenshot.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);$(ProjectDir)..\;$(ProjectDir)..\..\;$(ProjectDir)..\..\zlib;$(ProjectDir)..\unzip;$(ProjectDir)..\..\FMOD\api\inc;$(ProjectDir)..\..\libPNG;$(ProjectDir)..\..\libPNG\src;$(ProjectDir)..\apu\bapu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\sdd1.cpp" />
     <ClCompile Include="..\sdd1emu.cpp" />
     <ClCompile Include="..\server.cpp" />
@@ -578,11 +596,14 @@
     <ClCompile Include="..\unzip\zip.c" />
     <ClCompile Include="AVIOutput.cpp" />
     <ClCompile Include="CCGShader.cpp" />
-    <ClCompile Include="CD3DCG.cpp" />
+    <ClCompile Include="CD3DCG.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);$(ProjectDir)..\;$(ProjectDir)..\..\;$(ProjectDir)..\..\zlib;$(ProjectDir)..\unzip;$(ProjectDir)..\..\FMOD\api\inc;$(ProjectDir)..\..\libpng\;$(ProjectDir)..\..\libpng\src;$(ProjectDir)..\apu\bapu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="CDirect3D.cpp" />
     <ClCompile Include="CDirectDraw.cpp" />
     <ClCompile Include="cgFunctions.cpp" />
     <ClCompile Include="CGLCG.cpp" />
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);$(ProjectDir)..\;$(ProjectDir)..\..\;$(ProjectDir)..\..\zLib;$(ProjectDir)..\unzip;$(ProjectDir)..\..\FMOD\api\inc;$(ProjectDir)..\..\libpng\src;$(ProjectDir)..\..\libpng;$(ProjectDir)..\apu\bapu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     <ClCompile Include="CSaveLoadWithPreviewDlg.cpp" />
     <ClCompile Include="COpenGL.cpp" />
     <ClCompile Include="CShaderParamDlg.cpp" />

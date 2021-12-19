@@ -43,6 +43,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{31758447-7e76-4af0-8561-a377194049e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Wanderbar">
+      <UniqueIdentifier>{d72c3533-fbcd-4372-8491-7919b4ce6d41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\statemanager.h">
@@ -287,6 +290,21 @@
     </ClInclude>
     <ClInclude Include="CSaveLoadWithPreviewDlg.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\ScreenImage.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\Sidebar.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\js_delegate.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\method_dispatcher.h">
+      <Filter>Wanderbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Wanderbar\sidebar-snes.h">
+      <Filter>Wanderbar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -631,6 +649,15 @@
     </ClCompile>
     <ClCompile Include="CSaveLoadWithPreviewDlg.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\ScreenImage.cpp">
+      <Filter>Wanderbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-main.cpp">
+      <Filter>Wanderbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Wanderbar\sidebar-snes.cpp">
+      <Filter>Wanderbar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

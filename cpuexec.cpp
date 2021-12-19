@@ -19,6 +19,16 @@
 
 static inline void S9xReschedule (void);
 
+
+
+// SIDEBAR CONNECTION
+#include "Sidebar.h"
+extern SideBar* sidebar;
+
+
+
+//extern HINSTANCE g_hInst;
+
 void S9xMainLoop (void)
 {
 	#define CHECK_FOR_IRQ_CHANGE() \
@@ -172,10 +182,15 @@ void S9xMainLoop (void)
 
 		if (Settings.SA1)
 			S9xSA1MainLoop();
+
+		// SIDEBAR CONNECTION
+		sidebar->DoLogic();
 	}
 
 	S9xPackStatus();
 }
+
+
 
 static inline void S9xReschedule (void)
 {
@@ -378,7 +393,10 @@ void S9xDoHEventProcessing (void)
 			}
 
 			if (CPU.V_Counter == FIRST_VISIBLE_LINE)	// V=1
+			{
 				S9xStartScreenRefresh();
+				sidebar->DoLogicFrame();
+			}
 
 			S9xReschedule();
 

@@ -809,7 +809,7 @@ void WinRegisterConfigItems()
 	AddBoolC("MovieNotifyIgnored", Settings.MovieNotifyIgnored, false, "true to display \"(ignored)\" in the frame counter when recording when the last frame of input was not used by the SNES (such as lag or loading frames)");
 	AddBool("DisplayWatchedAddresses", Settings.DisplayWatchedAddresses, true);
 	AddBool2C("WrongMovieStateProtection", Settings.WrongMovieStateProtection, true, "off to allow states to be loaded for recording from a different movie than they were made in");
-	AddUIntC("MessageDisplayTime", Settings.InitialInfoStringTimeout, 120, "display length of messages, in frames. set to 0 to disable all message text");
+	AddUIntC("MessageDisplayTime", Settings.InitialInfoStringTimeout, 2, "display length of messages, in frames. set to 0 to disable all message text");
 #undef CATEGORY
 #define CATEGORY "Settings\\Win"
     AddUIntC("RewindBufferSize", GUI.rewindBufferSize, 0, "rewind buffer size in MB - 0 disables rewind support");
